@@ -1,5 +1,5 @@
 from app.db.mongo import mongo
-from app.models.movies import MoviesSerializer, MovieSerializer
+from app.models.movies import MovieSerializer, MoviesSerializer
 
 
 class MovieRepository:
@@ -9,13 +9,13 @@ class MovieRepository:
         return new_movie.inserted_id
 
     @staticmethod
-    async def GetMovies() -> list:
-        cursor = mongo.db["movies"].find({}).sort([("created_at", -1)]).limit(10)
+    async def GetMoviesByFilters(filter_: dict) -> list:
+        cursor = mongo.db["movies"].find(filter_).sort([("created_at", -1)]).limit(20)
         movies = await cursor.to_list()
         return MoviesSerializer(movies)
 
     @staticmethod
-    async def GetMovieById(movie_id: str) -> dict:
+    async def GetMovie(movie_id: str) -> dict:
         movie =  await mongo.db["movies"].find_one({"_id": movie_id})
         return MovieSerializer(movie)
 

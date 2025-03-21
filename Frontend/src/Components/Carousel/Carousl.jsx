@@ -36,9 +36,7 @@ export default function Carousl({ movies }) {
     },
   };
 
-  const cardies = movies.map((item) => (
-    <Card className="" key={item.title} {...item} />
-  ));
+  const cardies = movies.map((item) => <Card key={item.title} {...item} />);
   return (
     <div>
       <Carousel responsive={responsive}>{cardies}</Carousel>

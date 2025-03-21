@@ -1,6 +1,7 @@
 from app.models.movies import MovieModel, MovieUpdateModel, MovieCreateModel
 from app.repositories.movies_repo import MovieRepository
 
+
 class MovieService:
     @staticmethod
     async def CreateMovie(movie: MovieCreateModel) -> str:
@@ -9,13 +10,8 @@ class MovieService:
         return await MovieRepository.CreateMovie(movie_dict)
 
     @staticmethod
-    async def GetMovies() -> list:
-        movies = await MovieRepository.GetMovies()
-        return movies
-
-    @staticmethod
-    async def GetMovieById(movie_id: str) -> dict:
-        movie = await MovieRepository.GetMovieById(movie_id)
+    async def GetMovie(movie_id: str) -> dict:
+        movie = await MovieRepository.GetMovie(movie_id)
         return movie
 
     @staticmethod
@@ -26,3 +22,13 @@ class MovieService:
     @staticmethod
     async def DeleteMovie(movie_id: str) -> bool:
         return await MovieRepository.DeleteMovie(movie_id)
+
+    @staticmethod
+    async def GetMoviesByFilters(genre=None, languages=None, formats=None, certificate=None):
+        query = {}
+        if genre: query["genre"] = {"$in": genre}
+        if languages: query["language"] = {"$in": languages}
+        if formats: query["formats"] = {"$in": formats}
+        if certificate: query["certificate"] = certificate
+        movies = await MovieRepository.GetMoviesByFilters(query)
+        return movies
